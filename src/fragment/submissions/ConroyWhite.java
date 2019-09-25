@@ -9,23 +9,25 @@ import java.util.List;
 
 public class ConroyWhite {
 	public static void main(String[] args) throws IOException {
+		args = new String[1];
+		args[0]="file.txt";
 		// instantiate assemble line to reassembled fragments
 		AssemleLine assemble = new AssemleLine();
 		// read the test value from test file and defragment the values
-		BufferedReader in = new BufferedReader(new FileReader("file.txt"));
+		try (BufferedReader in = new BufferedReader(new FileReader(args[0]))) {
 		String fragmentProblem;
-		while ((fragmentProblem = in.readLine()) != null) {
-			System.out.println(assemble.reassembleLine(fragmentProblem));
+		in
+		.lines()
+		.map(AssemleLine::reassembleLine).forEach(System.out::println);
+
 		}
-
 	}
-
-}
+	
 
 /*
  * fragment entity with
  */
-class Fragments {
+static class Fragments {
 	public String fragment = "";
 	public String data = "";
 	public Match match = null;
@@ -70,7 +72,7 @@ class Fragments {
 
 }
 
-class Match {
+static class Match {
 	public Integer xvalue = 0;
 	public Integer yvalue = 0;
 	public Integer maxValue = 0;
@@ -115,13 +117,13 @@ class Match {
 
 }
 
-class FragmentException extends RuntimeException {
+static class FragmentException extends RuntimeException {
 	public FragmentException(String message) {
 		super(message);
 	}
 }
 
-class FragmentFactory {
+static class FragmentFactory {
 
 	private static FragmentFactory instance;
 
@@ -251,7 +253,7 @@ class FragmentFactory {
 	}
 }
 
-class OverLappingFragments {
+static class OverLappingFragments {
 
 	/*
 	 * find overlapping fragments
@@ -332,11 +334,11 @@ class OverLappingFragments {
 
 }
 
-class AssemleLine {
+static class AssemleLine {
 
-	FragmentFactory fragmentFactory = FragmentFactory.getInstance();
+	static FragmentFactory fragmentFactory = FragmentFactory.getInstance();
 
-	private String reassembleFragments(List<String> val) {
+	private static String reassembleFragments(List<String> val) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(val.get(0));
 		for (String str : val) {
@@ -345,7 +347,7 @@ class AssemleLine {
 		return sb.toString();
 	}
 
-	public String sortAndAssemble(String fragment, Integer responce, Integer request) {
+	public static String sortAndAssemble(String fragment, Integer responce, Integer request) {
 
 		String results[] = fragment.split(";");
 		ArrayList<String> collectionPayload = new ArrayList<>(Arrays.asList(results));
@@ -356,14 +358,14 @@ class AssemleLine {
 
 	}
 
-	private String[] splitValues(String valueToSplit) {
+	private static String[] splitValues(String valueToSplit) {
 		return valueToSplit.split(";");
 	}
 
 	/*
 	 * reassemble fragments
 	 */
-	public String reassembleLine(String fragment) {
+	public static String reassembleLine(String fragment) {
 
 		String results = defragment(fragment);
 		boolean isSorted = false;
@@ -419,7 +421,7 @@ class AssemleLine {
 	/*
 	 * decompose the fragments
 	 */
-	public String defragment(String fragment) {
+	public static String defragment(String fragment) {
 
 		StringBuffer buffer = new StringBuffer(fragment);
 		String fragments[] = buffer.toString().split(";");
@@ -447,7 +449,7 @@ class AssemleLine {
 	/*
 	 * assemble fragments together
 	 */
-	public String assembleTogetherLargeFragments(String fragement) {
+	public static String assembleTogetherLargeFragments(String fragement) {
 
 		List<Fragments> fragments = splitFragmentsIntoPairs(fragement);
 		int fragmentCount = LocateTheLongestMatches(fragments);
@@ -458,7 +460,7 @@ class AssemleLine {
 	/*
 	 * populate entity with fragments
 	 */
-	public Fragments getFragmentsFromEntity(Fragments fragment) {
+	public static Fragments getFragmentsFromEntity(Fragments fragment) {
 
 		String localFragment = fragment.fragment;
 		String localFragmentData = fragment.data;
@@ -483,7 +485,7 @@ class AssemleLine {
 	/*
 	 * locate the longest matches and return fragment count
 	 */
-	public int LocateTheLongestMatches(List<Fragments> fragments) {
+	public static int LocateTheLongestMatches(List<Fragments> fragments) {
 
 		int max = 0;
 		int count = 0;
@@ -503,7 +505,7 @@ class AssemleLine {
 	/*
 	 * split fragments using and remove the semicolon from file data
 	 */
-	public List<Fragments> splitFragmentsIntoPairs(String fragmenttedString) {
+	public static List<Fragments> splitFragmentsIntoPairs(String fragmenttedString) {
 		String[] fragments = fragmenttedString.split(";");
 		if (fragments.length < 2) {
 			throw new FragmentException("cannot perform opperstion");
@@ -517,7 +519,7 @@ class AssemleLine {
 	/*
 	 * find the collection of fragments and return them
 	 */
-	private List<Fragments> findFragments(String[] fragments) {
+	private static List<Fragments> findFragments(String[] fragments) {
 		List<Fragments> fragmentList = new ArrayList<>();
 
 		for (int i = 0; (i + 1) < fragments.length; ++i) {
@@ -532,4 +534,5 @@ class AssemleLine {
 		return fragmentList;
 	}
 
+}
 }
