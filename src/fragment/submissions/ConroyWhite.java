@@ -15,7 +15,7 @@ public class ConroyWhite {
 		AssemleLine assemble = new AssemleLine();
 		// read the test value from test file and defragment the values
 		try (BufferedReader in = new BufferedReader(new FileReader(args[0]))) {
-		String fragmentProblem;
+		
 		in
 		.lines()
 		.map(AssemleLine::reassembleLine).forEach(System.out::println);
