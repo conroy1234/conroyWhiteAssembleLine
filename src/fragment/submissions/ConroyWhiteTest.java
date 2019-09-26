@@ -21,7 +21,7 @@ class ConroyWhiteTest {
 	private ConroyWhite.AssemleLine conroy = new ConroyWhite.AssemleLine();
 
 	@Test
-	void test() throws FileNotFoundException, IOException {
+	void reassembleLineTest() throws FileNotFoundException, IOException {
 		String expected = "Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.";
 		String actual = "";
 		BufferedReader in = new BufferedReader(new FileReader("file.txt"));
